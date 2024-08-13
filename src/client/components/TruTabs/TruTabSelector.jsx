@@ -25,6 +25,8 @@ class TruTabSelector extends React.Component {
           className={clsx('tru-tab-selector no-ajaxy', active && 'active')}
           data-tabid={selectorId}
           onClick={e => e.preventDefault()}
+          href='#'
+          tabIndex={0}
         >
           {label}
           {showBadge && <span className='uk-badge uk-badge-grey uk-badge-small'>{badgeText}</span>}
