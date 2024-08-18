@@ -126,7 +126,7 @@ installController.install = function (req, res) {
   const UserSchema = require('../models').UserModel
   const GroupSchema = require('../models/group')
   const Counters = require('../models/counters')
-  const TicketTypeSchema = require('../models/tickettype')
+  const TicketTypeSchema = require('../models').TicketTypeModel
   const SettingsSchema = require('../models/setting')
 
   const data = req.body
