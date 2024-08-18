@@ -92,88 +92,97 @@ const BaseRouter = ({ user, setSession }) => {
     )
   } else {
     return (
-      <Routes>
-        {
-          (user.role.isAdmin &&
-            <Route path={'/'} element={<Navigate to={'/dashboard'} exact />} />) || 
-          <Route path={'/'} element={<Navigate to={'/tickets'} exact />} />
+<Routes>
+  {/* Default Route */}
+  <Route
+    path={'/'}
+    element={
+      user.role.isAdmin ? (
+        <Navigate to={'/dashboard'} exact />
+      ) : (
+        <Navigate to={'/tickets'} exact />
+      )
+    }
+  />
 
-        }
-        <Route path={'/mfa'} element={<Navigate to={'/dashboard'} exact />} />
-        <Route path={'logout'} element={<LogoutContainer setSession={setSession} />} exact />
-        <Route path={'profile'} element={<ProfileContainer setSession={setSession} />} exact />
-        {
-          (user.role.isAdmin &&
-            <Route path={'dashboard'} element={<DashboardContainer />} exact />
-          )
-        }
-        
-        {/* TICKETS */}
-        <Route path={'tickets'} element={<TC_Lazy key={0} sessionUser={user} />} exact />
-        <Route path={'tickets/active'} element={<TC_Lazy key={1} view='active' sessionUser={user} />} exact />
-        <Route path={'tickets/assigned'} element={<TC_Lazy key={2} view='assigned' sessionUser={user} />} exact />
-        <Route path={'tickets/new'} element={<TC_Lazy key={3} view='new' sessionUser={user} />} exact />
-        <Route path={'tickets/pending'} element={<TC_Lazy key={4} view='pending' sessionUser={user} />} exact />
-        <Route path={'tickets/open'} element={<TC_Lazy key={5} view='open' sessionUser={user} />} exact />
-        <Route path={'tickets/closed'} element={<TC_Lazy key={6} view='closed' sessionUser={user} />} exact />
-        <Route
-          path={'tickets/closed/page/:page'}
-          element={<TC_WithParams key={6} view='closed' sessionUser={user} />}
-          exact
-        />
-        <Route path={'tickets/:uid'} element={<SingleTicket sessionUser={user} />} exact />
+  {/* Common Routes */}
+  <Route path={'/mfa'} element={<Navigate to={'/dashboard'} exact />} />
+  <Route path={'logout'} element={<LogoutContainer setSession={setSession} />} exact />
+  <Route path={'profile'} element={<ProfileContainer setSession={setSession} />} exact />
 
-        {/* Conversations */}
-        <Route path={'messages'} element={<MessagesContainer key={0} sessionUser={user} />} exact />
-        <Route path={'messages/:convo'} element={<MessagesWithParams key={location.key} sessionUser={user} />} exact />
+  {/* Admin Routes */}
+  {user.role.isAdmin && (
+    <>
+      <Route path={'dashboard'} element={<DashboardContainer />} exact />
 
-        {/* Accounts*/}
-        <Route path={'accounts'} element={<AccountsContainer key={0} sessionUser={user} />} exact />
-        <Route path={'accounts/:view'} element={<AccountsWithParams key={location.key} sessionUser={user} />} exact />
+      {/* Accounts */}
+      <Route path={'accounts'} element={<AccountsContainer key={0} sessionUser={user} />} exact />
+      <Route path={'accounts/:view'} element={<AccountsWithParams key={location.key} sessionUser={user} />} exact />
 
-        {/* Groups */}
-        <Route path={'groups'} element={<GroupsContainer key={0} sessionUser={user} />} exact />
+      {/* Groups */}
+      <Route path={'groups'} element={<GroupsContainer key={0} sessionUser={user} />} exact />
 
-        {/* Teams */}
-        <Route path={'teams'} element={<TeamsContainer key={location.key} sessionUser={user} />} exact />
+      {/* Teams */}
+      <Route path={'teams'} element={<TeamsContainer key={location.key} sessionUser={user} />} exact />
 
-        {/* Departments */}
-        <Route path={'departments'} element={<DepartmentsContainer key={location.key} sessionUser={user} />} exact />
+      {/* Departments */}
+      <Route path={'departments'} element={<DepartmentsContainer key={location.key} sessionUser={user} />} exact />
 
-        {/* Notices*/}
-        <Route path={'notices'} element={<NoticesContainer key={location.key} sessionUser={user} />} exact />
+      {/* Notices */}
+      <Route path={'notices'} element={<NoticesContainer key={location.key} sessionUser={user} />} exact />
 
-        {/*Settings*/}
-        <Route path={'settings'} element={<SettingsLazy />} />
-        <Route path={'settings/general'} element={<SettingsLazy key={0} />} />
-        <Route path={'settings/accounts'} element={<SettingsLazy key={1} />} />
-        <Route path={'settings/appearance'} element={<SettingsLazy key={2} />} />
-        <Route path={'settings/permissions'} element={<SettingsLazy key={3} />} />
-        <Route path={'settings/tickets'} element={<SettingsLazy key={4} />} />
-        <Route path={'settings/mailer'} element={<SettingsLazy key={5} />} />
-        <Route path={'settings/elasticsearch'} element={<SettingsLazy key={6} />} />
-        <Route path={'settings/backup'} element={<SettingsLazy key={7} />} />
-        <Route path={'settings/server'} element={<SettingsLazy key={8} />} />
-        <Route path={'settings/legal'} element={<SettingsLazy key={9} />} />
+      {/* Settings */}
+      <Route path={'settings'} element={<SettingsLazy />} />
+      <Route path={'settings/general'} element={<SettingsLazy key={0} />} />
+      <Route path={'settings/accounts'} element={<SettingsLazy key={1} />} />
+      <Route path={'settings/appearance'} element={<SettingsLazy key={2} />} />
+      <Route path={'settings/permissions'} element={<SettingsLazy key={3} />} />
+      <Route path={'settings/tickets'} element={<SettingsLazy key={4} />} />
+      <Route path={'settings/mailer'} element={<SettingsLazy key={5} />} />
+      <Route path={'settings/elasticsearch'} element={<SettingsLazy key={6} />} />
+      <Route path={'settings/backup'} element={<SettingsLazy key={7} />} />
+      <Route path={'settings/server'} element={<SettingsLazy key={8} />} />
+      <Route path={'settings/legal'} element={<SettingsLazy key={9} />} />
 
-        <Route path={'v2settings'} element={<SettingsV2Lazy />} />
-        <Route path={'v2settings/timeanddate'} element={<SettingsTimeAndDateLazy />} />
-        <Route path={'v2settings/rebranding'} element={<SettingsRebrandingLazy />} />
-        <Route path={'v2settings/colorschemes'} element={<SettingsColorSchemesLazy />} />
-        <Route path={'v2settings/mailer'} element={<SettingsMailerLazy />} />
-        <Route path={'v2settings/incomingmail'} element={<SettingsIncomingMailLazy />} />
-        <Route path={'v2settings/mailnotificationtemplates'} element={<SettingsNotificationTemplatesLazy />} />
+      <Route path={'v2settings'} element={<SettingsV2Lazy />} />
+      <Route path={'v2settings/timeanddate'} element={<SettingsTimeAndDateLazy />} />
+      <Route path={'v2settings/rebranding'} element={<SettingsRebrandingLazy />} />
+      <Route path={'v2settings/colorschemes'} element={<SettingsColorSchemesLazy />} />
+      <Route path={'v2settings/mailer'} element={<SettingsMailerLazy />} />
+      <Route path={'v2settings/incomingmail'} element={<SettingsIncomingMailLazy />} />
+      <Route path={'v2settings/mailnotificationtemplates'} element={<SettingsNotificationTemplatesLazy />} />
+      <Route path={'v2settings/agents'} element={<SettingsAgentsLazy />} />
+      <Route path={'v2settings/roles'} element={<SettingsRolesAndPermissionsLazy />} />
+    </>
+  )}
 
-        <Route path={'v2settings/agents'} element={<SettingsAgentsLazy />} />
-        <Route path={'v2settings/roles'} element={<SettingsRolesAndPermissionsLazy />} />
+  {/* Ticket Routes (Accessible by all users) */}
+  <Route path={'tickets'} element={<TC_Lazy key={0} sessionUser={user} />} exact />
+  <Route path={'tickets/active'} element={<TC_Lazy key={1} view='active' sessionUser={user} />} exact />
+  <Route path={'tickets/assigned'} element={<TC_Lazy key={2} view='assigned' sessionUser={user} />} exact />
+  <Route path={'tickets/new'} element={<TC_Lazy key={3} view='new' sessionUser={user} />} exact />
+  <Route path={'tickets/pending'} element={<TC_Lazy key={4} view='pending' sessionUser={user} />} exact />
+  <Route path={'tickets/open'} element={<TC_Lazy key={5} view='open' sessionUser={user} />} exact />
+  <Route path={'tickets/closed'} element={<TC_Lazy key={6} view='closed' sessionUser={user} />} exact />
+  <Route
+    path={'tickets/closed/page/:page'}
+    element={<TC_WithParams key={6} view='closed' sessionUser={user} />}
+    exact
+  />
+  <Route path={'tickets/:uid'} element={<SingleTicket sessionUser={user} />} exact />
 
-        <Route path={'about'} element={<AboutContainer />} />
+  {/* Conversations (Accessible by all users) */}
+  <Route path={'messages'} element={<MessagesContainer key={0} sessionUser={user} />} exact />
+  <Route path={'messages/:convo'} element={<MessagesWithParams key={location.key} sessionUser={user} />} exact />
 
-        <Route path={'flow'} element={<TestFlow />} />
+  {/* Other Routes */}
+  <Route path={'about'} element={<AboutContainer />} />
+  <Route path={'flow'} element={<TestFlow />} />
 
-        <Route path={'*'} element={<NotFound />} />
-      </Routes>
-    )
+  {/* Not Found Route */}
+  <Route path={'*'} element={<NotFound />} />
+</Routes>
+      )
   }
 }
 
