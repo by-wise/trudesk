@@ -1,7 +1,5 @@
 {
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -24,11 +22,8 @@
     "n/no-callback-literal": 0,
     "new-cap": 0,
     "no-console": 2,
-    "complexity": [
-      "error",
-      30
-    ],
-    "@typescript-eslint/no-extra-semi": 1,
+    "complexity": ["error", 30],
+    "@typescript-eslint/no-extra-semi": 0,
     // Temp Typescript while converting
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/ban-ts-ignore": "off",
