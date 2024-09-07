@@ -21,8 +21,9 @@ import path from 'path'
 import config from '../config'
 import { trudeskDatabase } from '../database'
 import winston from '../logger'
-import { PriorityModel, RoleModel, SettingModel, TicketModel, TicketTagModel, TicketTypeModel } from '../models'
+import { PriorityModel, RoleModel, SettingModel, TicketModel, TicketStatusModel, TicketTagModel, TicketTypeModel } from '../models'
 import type { TicketTypeClass } from "../models/tickettype"
+import { TicketStatusClass } from '../models/ticketStatus'
 
 type DefaultGrants = {
   userGrants: Array<string>
@@ -215,8 +216,6 @@ function downloadWin32MongoDBTools(callback) {
     if (
       !fs.existsSync(path.join(savePath, 'mongodump.exe')) ||
       !fs.existsSync(path.join(savePath, 'mongorestore.exe'))
-      // !fs.existsSync(path.join(savePath, 'libeay32.dll')) ||
-      // !fs.existsSync(path.join(savePath, 'ssleay32.dll'))
     ) {
       winston.debug('Windows platform detected. Downloading MongoDB Tools [' + filename + ']')
       fs.emptyDirSync(savePath)
@@ -351,6 +350,84 @@ function ticketTypeSettingDefault(callback: any) {
       }
     }
   })
+}
+
+async function defaultTicketStatus(callback: any) {
+  const statuses: Array<TicketStatusClass> = [] 
+
+  const newStatus = new TicketStatusModel({
+    name: 'New',
+    htmlColor: '#29b955',
+    uid: 0,
+    order: 0,
+    slatimer: false,
+    isResolved: false,
+    isLocked: true
+  })
+
+  const openStatus = new TicketStatusModel({
+    name: 'Open',
+    htmlColor: '#d32f2f',
+    uid: 1,
+    order: 1,
+    slatimer: true,
+    isResolved: false,
+    isLocked: true
+  })
+
+  const pendingStatus = new TicketStatusModel({
+    name: 'Pending',
+    htmlColor: '#2196F3',
+    uid: 2,
+    order: 2,
+    slatimer: false,
+    isResolved: false,
+    isLocked: true
+  })
+
+  const closedStatus = new TicketStatusModel({
+    name: 'Closed',
+    htmlColor: '#CCCCCC',
+    uid: 3,
+    order: 3,
+    slatimer: false,
+    isResolved: true,
+    isLocked: true
+  })
+
+  const hasNewStatus = await TicketStatusModel.countDocuments({name: 'New', isLocked: true, uid: 0}).count() > 0
+  if (!hasNewStatus)
+    statuses.push(newStatus)
+
+  const hasOpenStatus = await TicketStatusModel.countDocuments({name: 'Open', isLocked: true, uid: 1}).count() > 0
+  if (!hasOpenStatus)
+    statuses.push(openStatus)
+
+  const hasPendingStatus = await TicketStatusModel.countDocuments({name: 'Pending', isLocked: true, uid: 2}).count() > 0
+  if (!hasPendingStatus)
+    statuses.push(pendingStatus)
+
+  const hasClosedStatus = await TicketStatusModel.countDocuments({name: 'Closed', isLocked: true, uid: 3}).count() > 0
+  if (!hasClosedStatus)
+    statuses.push(closedStatus)
+
+  const p1 = new Promise<void>((resolve, reject) => {
+    ;(async() => {
+      try {
+        statuses.forEach(async (i) => {
+          await i.save()
+        })
+
+        return resolve()
+      } catch (e) {
+        return reject(e)
+      }
+    })()
+  })
+
+  Promise.all([p1]).then(() => {
+    callback()
+  }).catch((err) => callback(err))
 }
 
 async function ticketPriorityDefaults(callback: any) {
@@ -696,6 +773,9 @@ export const init = function (callback: () => void) {
       },
       function (done) {
         return ticketTypeSettingDefault(done)
+      },
+      function (done) {
+        return defaultTicketStatus(done)
       },
       function (done) {
         return ticketPriorityDefaults(done)
