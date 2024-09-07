@@ -12,6 +12,7 @@
 
  **/
 
+import { DocumentType } from '@typegoose/typegoose'
 import async, { series } from 'async'
 import fs from 'fs-extra'
 import _ from 'lodash'
@@ -353,7 +354,7 @@ function ticketTypeSettingDefault(callback: any) {
 }
 
 async function defaultTicketStatus(callback: any) {
-  const statuses: Array<TicketStatusClass> = [] 
+  const statuses = new Array<DocumentType<TicketStatusClass>>()
 
   const newStatus = new TicketStatusModel({
     name: 'New',
@@ -414,7 +415,7 @@ async function defaultTicketStatus(callback: any) {
   const p1 = new Promise<void>((resolve, reject) => {
     ;(async() => {
       try {
-        statuses.forEach(async (i) => {
+        statuses.forEach(async (i: DocumentType<TicketStatusClass>) => {
           await i.save()
         })
 
