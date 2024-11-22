@@ -10152,6 +10152,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"encodeurl@npm:~2.0.0":
+  version: 2.0.0
+  resolution: "encodeurl@npm:2.0.0"
+  checksum: abf5cd51b78082cf8af7be6785813c33b6df2068ce5191a40ca8b1afe6a86f9230af9a9ce694a5ce4665955e5c1120871826df9c128a642e09c58d592e2807fe
+  languageName: node
+  linkType: hard
+
 "encoding-japanese@npm:2.0.0":
   version: 2.0.0
   resolution: "encoding-japanese@npm:2.0.0"
@@ -11422,12 +11429,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-static-gzip@npm:2.1.7":
-  version: 2.1.7
-  resolution: "express-static-gzip@npm:2.1.7"
+"express-static-gzip@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "express-static-gzip@npm:2.2.0"
   dependencies:
-    serve-static: ^1.14.1
-  checksum: 7415f5c44ae30c6dec7cd1028bc34e9d2f7fc263bcb97aca5b1b0be62ecf630757c27b864e3a5a8f413a52909de1ea81c6f104f1a578303cb8bdaeb293cafcd0
+    parseurl: ^1.3.3
+    serve-static: ^1.16.2
+  checksum: 84e0a50047ecb9e3c49defd8559442c42b8b253df3665018250ed465e0b3434ec61b325118927bdf17d31b8aba3e6364d35196ee6b62e94e343049a3bbe27be0
   languageName: node
   linkType: hard
 
@@ -19372,17 +19380,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"parseurl@npm:^1.3.3, parseurl@npm:~1.3.3":
+  version: 1.3.3
+  resolution: "parseurl@npm:1.3.3"
+  checksum: 407cee8e0a3a4c5cd472559bca8b6a45b82c124e9a4703302326e9ab60fc1081442ada4e02628efef1eb16197ddc7f8822f5a91fd7d7c86b51f530aedb17dfa2
+  languageName: node
+  linkType: hard
+
 "parseurl@npm:~1.3.2":
   version: 1.3.2
   resolution: "parseurl@npm:1.3.2"
   checksum: e708a6d56adee551427c64581fdc72bcfeaf017ecac37b6d98080b32fef172c35382120c2b8959f23ea5229e4829334f4f0031c15d7c7db8abef135caaf7cbd4
-  languageName: node
-  linkType: hard
-
-"parseurl@npm:~1.3.3":
-  version: 1.3.3
-  resolution: "parseurl@npm:1.3.3"
-  checksum: 407cee8e0a3a4c5cd472559bca8b6a45b82c124e9a4703302326e9ab60fc1081442ada4e02628efef1eb16197ddc7f8822f5a91fd7d7c86b51f530aedb17dfa2
   languageName: node
   linkType: hard
 
@@ -22419,6 +22427,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"send@npm:0.19.0":
+  version: 0.19.0
+  resolution: "send@npm:0.19.0"
+  dependencies:
+    debug: 2.6.9
+    depd: 2.0.0
+    destroy: 1.2.0
+    encodeurl: ~1.0.2
+    escape-html: ~1.0.3
+    etag: ~1.8.1
+    fresh: 0.5.2
+    http-errors: 2.0.0
+    mime: 1.6.0
+    ms: 2.1.3
+    on-finished: 2.4.1
+    range-parser: ~1.2.1
+    statuses: 2.0.1
+  checksum: 5ae11bd900c1c2575525e2aa622e856804e2f96a09281ec1e39610d089f53aa69e13fd8db84b52f001d0318cf4bb0b3b904ad532fc4c0014eb90d32db0cff55f
+  languageName: node
+  linkType: hard
+
 "serialize-error@npm:^7.0.1":
   version: 7.0.1
   resolution: "serialize-error@npm:7.0.1"
@@ -22459,7 +22488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serve-static@npm:1.15.0, serve-static@npm:^1.14.1":
+"serve-static@npm:1.15.0":
   version: 1.15.0
   resolution: "serve-static@npm:1.15.0"
   dependencies:
@@ -22468,6 +22497,18 @@ __metadata:
     parseurl: ~1.3.3
     send: 0.18.0
   checksum: af57fc13be40d90a12562e98c0b7855cf6e8bd4c107fe9a45c212bf023058d54a1871b1c89511c3958f70626fff47faeb795f5d83f8cf88514dbaeb2b724464d
+  languageName: node
+  linkType: hard
+
+"serve-static@npm:^1.16.2":
+  version: 1.16.2
+  resolution: "serve-static@npm:1.16.2"
+  dependencies:
+    encodeurl: ~2.0.0
+    escape-html: ~1.0.3
+    parseurl: ~1.3.3
+    send: 0.19.0
+  checksum: dffc52feb4cc5c68e66d0c7f3c1824d4e989f71050aefc9bd5f822a42c54c9b814f595fc5f2b717f4c7cc05396145f3e90422af31186a93f76cf15f707019759
   languageName: node
   linkType: hard
 
@@ -24320,7 +24361,7 @@ __metadata:
     express: 4.18.2
     express-hbs: 2.4.0
     express-session: 1.17.3
-    express-static-gzip: 2.1.7
+    express-static-gzip: ^2.2.0
     fast-csv: 4.3.6
     fs-extra: 10.1.0
     grunt: 1.6.1

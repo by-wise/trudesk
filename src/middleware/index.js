@@ -47,9 +47,13 @@ module.exports = function (app, db, callback) {
       expressStaticGzip(path.resolve(config.trudeskRoot(), 'dist/public'), {
         enableBrotli: true,
         orderPreference: ['br', 'gz'],
-        setHeaders: res => {
-          res.setHeaders('Cache-Control', 'public, max-age=31536000')
+        serveStatic: {
+          maxAge: 31536000,
+          cacheControl: true,
         },
+        // setHeaders: res => {
+        //   res.setHeaders('Cache-Control', 'public, max-age=31536000')
+        // },
         index: false
       })
     )
