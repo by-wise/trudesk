@@ -103,8 +103,17 @@ class IssuePartial extends React.Component {
       })
       .catch(error => {
         Log.error(error)
+        let errMessage = 'An Error has occurred.'
+        if (error.message) errMessage = error.message
+        if (error.response && error.response.data) errMessage = error.response.data
+        if (error.response && error.response.data && error.response.data.error) errMessage = error.response.data.error
+
+        // console.error('error',error)
+        // console.error('error.response.data.error',error.response.data.error)
+        // console.error('error.message',error.message)
+
         if (error.response) Log.error(error.response)
-        helpers.UI.showSnackbar(error, true)
+        helpers.UI.showSnackbar(errMessage, true)
       })
   }
 

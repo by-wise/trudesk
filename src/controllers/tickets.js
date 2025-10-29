@@ -567,7 +567,7 @@ ticketsController.uploadImageMDE = function (req, res) {
     if (mimetype.indexOf('image/') === -1) {
       error = {
         status: 500,
-        message: 'Invalid File Type'
+        message: 'Invalid Mime Type: ' + mimetype
       }
 
       return file.resume()
@@ -595,7 +595,7 @@ ticketsController.uploadImageMDE = function (req, res) {
     if (!allowedExtensions.includes(ext.toLocaleLowerCase())) {
       error = {
         status: 400,
-        message: 'Invalid File Type'
+        message: 'Invalid File Type: ' + ext
       }
 
       return file.resume()
@@ -658,7 +658,7 @@ ticketsController.uploadAttachment = function (req, res) {
     headers: req.headers,
     limits: {
       files: 1,
-      fileSize: 10 * 1024 * 1024 // 10mb limit
+      fileSize: 20 * 1024 * 1024 // 10mb limit
     }
   })
 
@@ -685,7 +685,9 @@ ticketsController.uploadAttachment = function (req, res) {
       mimetype.indexOf('audio/mp3') === -1 &&
       mimetype.indexOf('audio/wav') === -1 &&
       mimetype.indexOf('application/x-zip-compressed') === -1 &&
+      mimetype.indexOf('application/zip') === -1 &&
       mimetype.indexOf('application/pdf') === -1 &&
+      mimetype.indexOf('application/zip') === -1 &&
       //  Office Mime-Types
       mimetype.indexOf('application/msword') === -1 &&
       mimetype.indexOf('application/vnd.openxmlformats-officedocument.wordprocessingml.document') === -1 &&
@@ -694,7 +696,7 @@ ticketsController.uploadAttachment = function (req, res) {
     ) {
       error = {
         status: 400,
-        message: 'Invalid File Type'
+        message: 'Invalid Mime Type: ' + mimetype
       }
 
       return file.resume()
@@ -733,7 +735,7 @@ ticketsController.uploadAttachment = function (req, res) {
     if (!allowedExts.includes(ext)) {
       error = {
         status: 400,
-        message: 'Invalid File Type'
+        message: 'Invalid File Type: ' + ext
       }
 
       return file.resume()
@@ -840,6 +842,7 @@ ticketsController.uploadAttachment = function (req, res) {
 }
 
 function handleError (res, err) {
+  winston.warn('tickets.handleError: ', err)
   if (err) {
     winston.warn(err)
     if (!err.status) res.status = 500
