@@ -20,7 +20,7 @@ const logger = Winston.createLogger({
           return `${info.timestamp} ${info.level}: ${info.message}`
         })
       ),
-      level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info'
+      level: process.env.NODE_ENV !== 'production' ? 'debug' : 'debug'// // 'info' //
     })
   ]
 })
