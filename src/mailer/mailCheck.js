@@ -144,9 +144,11 @@ function bindImapReady () {
           async.waterfall(
             [
               function (next) {
+                // winston.debug('first waterfall')
                 mailCheck.Imap.search(['UNSEEN'], next)
               },
               function (results, next) {
+                let mailQty = _.size(results)
                 if (_.size(results) < 1) {
                   winston.debug('MailCheck: Nothing to Fetch.')
                   return next()
@@ -159,26 +161,43 @@ function bindImapReady () {
                   flag = '\\Deleted'
                 }
 
+                winston.debug('Mail flag %s', flag)
+
                 var f = mailCheck.Imap.fetch(results, {
                   bodies: ''
                 })
 
-                f.on('message', function (msg) {
+                f.on('message', function (msg,mailSequence) {
+
+                  winston.debug('On: message')
+
                   msg.on('body', function (stream) {
                     var message = {}
                     var buffer = ''
+
+                    winston.debug('On: body')
+
                     stream.on('data', function (chunk) {
+                      winston.debug('On: data chunk')
                       buffer += chunk.toString('utf8')
                     })
 
                     stream.once('end', function () {
+                      winston.debug('Once: end')
+
+                      // winston.debug('Buffer: %s',buffer)
+
                       simpleParser(buffer, function (err, mail) {
                         if (err) winston.warn(err)
+
+                        if (mail.headers.has('to')) {
+                          message.to = mail.headers.get('to').value[0].address
+                        }
 
                         if (mail.headers.has('from')) {
                           message.from = mail.headers.get('from').value[0].address
                         }
-
+                        
                         if (mail.subject) {
                           message.subject = mail.subject
                         } else {
@@ -193,22 +212,41 @@ function bindImapReady () {
                           message.body = mail.textAsHtml
                         }
 
+                        winston.debug('mailCheck message: %s',message)
+
                         mailCheck.messages.push(message)
+
+                        winston.debug('mailCheck.messages.length: %s',mailCheck.messages.length)
+
+                        if(mailCheck.messages.length == mailQty){
+                          winston.debug('End of messages')
+                          winston.debug('Handling messages')
+    
+                          handleMessages(mailCheck.messages)
+                        }
                       })
                     })
+
                   })
                 })
 
                 f.on('end', function () {
+                  winston.debug('On: end messages')
+                  winston.debug('typeof mailCheck.messages: %s',typeof mailCheck.messages)
+
                   mailCheck.Imap.addFlags(results, flag, function () {
                     mailCheck.Imap.closeBox(true, function () {
                       mailCheck.Imap.end()
-                      handleMessages(mailCheck.messages, function () {
+
+                      winston.debug('Handling messages')
+
+                      // handleMessages(mailCheck.messages, function () {
                         mailCheck.Imap.destroy()
-                      })
+                      // })
                     })
                   })
                 })
+
               }
             ],
             function (err) {
@@ -249,6 +287,10 @@ function handleMessages (messages, done) {
       async.auto(
         {
           handleUser: function (callback) {
+
+            winston.debug('Message recipient: %s', message.to)
+            winston.debug('Handling user: %s', message.from)
+
             userSchema.getUserByEmail(message.from, function (err, user) {
               if (err) winston.warn(err)
               if (!err && user) {
@@ -264,6 +306,8 @@ function handleMessages (messages, done) {
                   message.owner = response.user
                   message.group = response.group
 
+                  // winston.debug('createUserFromEmail: %s', response)
+
                   return callback(null, response)
                 })
               } else {
@@ -274,6 +318,8 @@ function handleMessages (messages, done) {
           handleGroup: [
             'handleUser',
             function (results, callback) {
+              winston.debug('handleGroup: %s', message.group)
+
               if (!_.isUndefined(message.group)) {
                 return callback()
               }
@@ -309,6 +355,8 @@ function handleMessages (messages, done) {
             }
           ],
           handleTicketType: function (callback) {
+            winston.debug('handleTicketType')
+
             if (mailCheck.fetchMailOptions.defaultTicketType === 'Issue') {
               ticketTypeSchema.getTypeByName('Issue', function (err, type) {
                 if (err) return callback(err)
@@ -333,6 +381,8 @@ function handleMessages (messages, done) {
             function (result, callback) {
               var type = result.handleTicketType
 
+              winston.debug('handlePriority')
+
               if (mailCheck.fetchMailOptions.defaultPriority !== '') {
                 return callback(null, mailCheck.fetchMailOptions.defaultPriority)
               }
@@ -348,6 +398,8 @@ function handleMessages (messages, done) {
             }
           ],
           handleStatus: function (callback) {
+            winston.debug('handleStatus')
+
             statusSchema.getStatus(function (err, statuses) {
               if (err) return callback(err)
 
@@ -371,6 +423,8 @@ function handleMessages (messages, done) {
                 owner: message.owner._id
               }
 
+              winston.debug('handleCreateTicket')
+
               Ticket.create(
                 {
                   owner: message.owner._id,
@@ -383,6 +437,8 @@ function handleMessages (messages, done) {
                   history: [HistoryItem]
                 },
                 function (err, ticket) {
+                  winston.debug('Creating ticket: %s', ticket)
+
                   if (err) {
                     winston.warn('Failed to create ticket from email: ' + err)
                     return callback(err)
@@ -403,7 +459,7 @@ function handleMessages (messages, done) {
         function (err) {
           winston.debug('Created %s tickets from mail', count)
           if (err) winston.warn(err)
-          return done(err)
+          // return done(err)
         }
       )
     }
