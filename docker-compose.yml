@@ -1,7 +1,8 @@
 #version: '2.1'
 services:
   trudesk:
-    image: by-wise/trudesk:1
+    image: domagalhaes/trudesk:1.2.11
+    platform: linux/amd64
     restart: always
     ports:
       - "8118:8118"

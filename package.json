@@ -18,7 +18,7 @@
     "webpackdev": "webpack --config webpack.config.js",
     "webpackdist": "rimraf public/js && webpack --env production --node-env production --config webpack.config.js",
     "snyk-protect": "snyk protect",
-    "docker:build": "docker buildx build --platform linux/amd64 -t by-wise/trudesk:1 .",
+    "docker:build": "docker buildx build --platform linux/amd64 -t domagalhaes/trudesk:1.2.11 .",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose stop trudesk mongo elasticsearch",
     "docker:dev:up": "docker compose -f docker-compose.dev.yml -p trudesk-dev up -d",
