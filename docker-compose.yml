@@ -16,8 +16,9 @@ services:
       TD_MONGODB_DATABASE: trudesk
       USE_XFORWARDIP: "true"
     volumes:
-      - trudesk_uploads:/usr/src/trudesk/public/uploads
-      - trudesk_backups:/usr/src/trudesk/backups
+      - ./config/config.yml:/usr/src/trudesk/config.yml:rw
+      - trudesk_uploads:/usr/src/trudesk/public/uploads:rw
+      - trudesk_backups:/usr/src/trudesk/backups:rw
   mongo:
     image: mongo:5.0-focal
     restart: always

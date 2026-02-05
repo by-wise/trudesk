@@ -21,6 +21,7 @@ const async = require('async')
 const AdmZip = require('adm-zip')
 const database = require('../database')
 const winston = require('../logger')
+const Setting = require('../models/setting')  // ← Adicionado: modelo de settings
 
 global.env = process.env.NODE_ENV || 'production'
 
@@ -117,9 +118,30 @@ function runRestore (file, callback) {
     if (code === 0) {
       callback(null, 'done')
     } else {
-      callback(new Error('mongorestore falied with code ' + code))
+      callback(new Error('mongorestore failed with code ' + code))
     }
   })
+}
+
+// Nova função: Força o flag 'installed' para true após restore bem-sucedido
+function forceInstalledFlag (callback) {
+  winston.info('Forçando setting "installed" para true após restauração bem-sucedida...')
+
+  Setting.updateOne(
+    { name: 'installed' },
+    { $set: { name: 'installed', value: true } },
+    { upsert: true },
+    function (err) {
+      if (err) {
+        winston.error('Erro ao forçar installed=true: ' + err.message)
+        // Continua mesmo com erro (não quebra o restore)
+        return callback()
+      }
+
+      winston.info('Setting "installed" atualizado com sucesso para true.')
+      callback()
+    }
+  )
 }
 
 ;(function () {
@@ -171,6 +193,10 @@ function runRestore (file, callback) {
           },
           function (next) {
             runRestore(FILE, next)
+          },
+          function (next) {
+            // ← ADICIONADO AQUI: força o flag após o mongorestore concluir com sucesso
+            forceInstalledFlag(next)
           },
           function (next) {
             copyUploads(FILE, next)

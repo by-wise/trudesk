@@ -21,7 +21,9 @@ FROM node:16.14-alpine
 WORKDIR /usr/src/trudesk
 
 # Só runtime deps (sem build tools)
-RUN apk add --no-cache ca-certificates bash mongodb-tools && rm -rf /tmp/*
+RUN apk add --no-cache ca-certificates bash mongodb-tools \
+    && npm install -g pm2 \
+    && rm -rf /tmp/* /root/.npm
 
 COPY --from=builder /usr/src/trudesk .
 

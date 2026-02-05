@@ -10,4 +10,8 @@ if [ ! -f /usr/src/trudesk/public/uploads/users/defaultProfile.jpg ]; then
     cp /usr/src/trudesk/public/img/defaultProfile.jpg /usr/src/trudesk/public/uploads/users/defaultProfile.jpg
 fi
 
-node /usr/src/trudesk/runner.js
+#node /usr/src/trudesk/runner.js
+
+# Inicia com pm2-runtime (logs vão para stdout/stderr automaticamente)
+# --merge-logs é opcional mas ajuda se tiver múltiplos processos
+exec pm2-runtime start /usr/src/trudesk/app.js --name trudesk

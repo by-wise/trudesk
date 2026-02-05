@@ -30,6 +30,7 @@ global.forks = []
 nconf.argv().env()
 
 global.env = process.env.NODE_ENV || 'development'
+global.isDocker = process.env.TRUDESK_DOCKER || false
 
 if (!process.env.FORK) {
   winston.info('    .                              .o8                     oooo')
@@ -43,19 +44,25 @@ if (!process.env.FORK) {
   winston.info('trudesk v' + pkg.version + ' Copyright (C) 2014-2023 Chris Brame')
   winston.info('')
   winston.info('Running in: ' + global.env)
+  winston.info('Docker installation: ' + global.isDocker)
   winston.info('Server Time: ' + new Date())
 }
 
 let configFile = path.join(__dirname, '/config.yml')
 
+winston.debug('Initial Config File: ' + configFile)
+
 if (nconf.get('config')) {
   configFile = path.resolve(__dirname, nconf.get('config'))
+  winston.debug('nConf Config File: ' + configFile)
 }
 
 // Make sure we convert the .json file to .yml
 checkForOldConfig()
 
 const configExists = fs.existsSync(configFile)
+
+winston.debug('Config Exists: ' + configExists)
 
 function launchInstallServer () {
   // Load the defaults for the install server
