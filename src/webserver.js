@@ -18,10 +18,12 @@ const nconf = require('nconf')
   .env()
 
 const express = require('express')
+const { resolve } = require('path')
 const WebServer = express()
 const winston = require('./logger')
 const middleware = require('./middleware')
 const routes = require('./routes')
+// const I18N = require('@ladjs/i18n')
 const server = require('http').createServer(WebServer)
 let port = nconf.get('port') || 8118
 
@@ -37,6 +39,30 @@ let port = nconf.get('port') || 8118
     if (p !== undefined) port = p
     middleware(app, db, function (middleware, store) {
       module.exports.sessionStore = store
+
+      /*
+      // Setup i18n
+      const i18n = new I18N({
+        defaultLocale: 'pt',               // ou 'pt-BR' se preferir o padrão com região
+        locales: ['en', 'pt'],             // ← obrigatório: inclua 'pt' aqui!
+        // ou se quiser mais: ['en', 'pt', 'es', 'fr']
+
+        // Outras opções úteis (recomendadas):
+        //directory: path.join(__dirname, '../locales'),  // pasta com arquivos JSON de traduções (ex: locales/pt.json)
+        directory: resolve('../locales'),
+        objectNotation: true,              // permite chaves como 'header.title'
+        updateFiles: false,                // não atualiza arquivos automaticamente (útil em prod)
+        indent: '  ',
+        extension: '.json',
+        cookie: 'locale',                  // nome do cookie para persistir a escolha do usuário
+        logDebugFn: console.log,
+        logWarnFn: console.log,
+        logErrorFn: console.log
+      })
+      app.use(i18n.middleware);
+      app.use(i18n.redirect);
+      */
+
       routes(app, middleware)
 
       if (typeof callback === 'function') callback()

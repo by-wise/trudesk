@@ -19,7 +19,6 @@ import SidebarItem from 'components/Nav/SidebarItem'
 import NavSeparator from 'components/Nav/NavSeperator'
 import Submenu from 'components/Nav/Submenu'
 import SubmenuItem from 'components/Nav/SubmenuItem'
-
 import { updateNavChange } from 'actions/nav'
 
 import Helpers from 'lib/helpers'

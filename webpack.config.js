@@ -5,7 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 
 module.exports = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode: 'development',
   target: 'web',
   entry: {
     vendor: [
@@ -95,7 +95,13 @@ module.exports = {
       serverSocket: path.resolve(__dirname, 'src/socketio')
     },
 
-    extensions: ['.js', '.jsx', '.ts', 'tsx']
+    extensions: ['.js', '.jsx', '.ts', 'tsx'],
+    fallback: {
+      "path": require.resolve("path-browserify"),
+      "url": require.resolve("url/"),
+      "fs": false,
+      "process": require.resolve("process/browser")
+    }
   },
   externals: {
     // These are bunbled already
@@ -119,11 +125,7 @@ module.exports = {
               publicPath: '/public/css'
             }
           },
-          {
-            loader: 'css-loader',
-            options: { minimize: true }
-          },
-          'postcss-loader',
+          'css-loader',
           'sass-loader'
         ]
       },
@@ -133,7 +135,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/react', '@babel/env'],
+            presets: ['@babel/react', '@babel/preset-env'],
             plugins: [
               ['@babel/plugin-proposal-decorators', { legacy: true }],
               ['@babel/plugin-proposal-class-properties', { loose: true }]
@@ -157,22 +159,22 @@ module.exports = {
         extractComments: false
       })
     ],
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          name: 'vendor',
-          test: 'vendor',
-          chunks: 'initial',
-          enforce: true
-        },
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        }
-      }
-    }
+    // splitChunks: {
+    //   cacheGroups: {
+    //     vendor: {
+    //       name: 'vendor',
+    //       test: 'vendor',
+    //       chunks: 'initial',
+    //       enforce: true
+    //     },
+    //     styles: {
+    //       name: 'styles',
+    //       test: /\.css$/,
+    //       chunks: 'all',
+    //       enforce: true
+    //     }
+    //   }
+    // }
   },
   plugins: [
     new webpack.ProvidePlugin({

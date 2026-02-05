@@ -22,7 +22,7 @@ function mainRoutes (router, middleware, controllers) {
     return res.status(200).send('OK')
   })
   router.get('/version', function (req, res) {
-    return res.json({ version: packagejson.version })
+    return res.json({ version: packagejson.version, message: req.t('HELLO_WORLD') })
   })
   router.get('/install', function (req, res) {
     return res.redirect('/')
