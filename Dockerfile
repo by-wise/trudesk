@@ -18,6 +18,8 @@ RUN rm -rf .yarn/cache
 # Etapa final: sem rebuild bcrypt (bcryptjs não precisa)
 FROM node:16.14-alpine
 
+LABEL org.opencontainers.image.source="https://github.com/by-wise/trudesk"
+
 WORKDIR /usr/src/trudesk
 
 # Só runtime deps (sem build tools)

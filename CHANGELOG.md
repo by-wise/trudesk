@@ -1,3 +1,15 @@
+## [1.2.11] (2026-09-06)
+
+
+### Chore / Docker / Deployment
+
+* **docker:** update trudesk image to ghcr.io/by-wise/trudesk:1.2.11 and add docker dependency on mongo
+* **docker:** add LABEL org.opencontainers.image.source pointing to by-wise/trudesk repository
+* **docker-compose:** bind database services (mongo, elasticsearch) ports to 127.0.0.1 for security
+* **docker-compose:** fix configuration volume mapping to use directory mount
+* **docker-compose:** add anonymous node_modules volume in development to avoid host dependency conflicts on macOS ARM64
+* **docker-compose:** clean up deprecated/redundant mongo volumes
+
 ## [1.2.10](https://github.com/polonel/trudesk/compare/v1.2.9...v1.2.10) (2023-11-01)
 
 

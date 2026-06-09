@@ -1,7 +1,7 @@
-version: '2.1'
+#version: '2.1'
 services:
   trudesk:
-    image: polonel/trudesk:1  # Usa a imagem original, pois vamos sobrepor com bind
+    image: ghcr.io/by-wise/trudesk:1.2.11  # Usa a sua imagem como base para garantir compatibilidade do ambiente
     restart: always
     ports:
       - "8118:8118"
@@ -17,6 +17,7 @@ services:
       ELASTICSEARCH_URI: http://elasticsearch:9200
     volumes:
       - ./:/usr/src/trudesk  # Bind mount: Monta o diretório local (.) no path interno do container
+      - /usr/src/trudesk/node_modules  # Volume anônimo: evita conflito de dependências nativas (como bcrypt) no macOS ARM64
       - trudesk_uploads:/usr/src/trudesk/public/uploads
       - trudesk_backups:/usr/src/trudesk/backups
     #command: sh -c "yarn install && yarn build && node ./app"  # Executa install, build e depois inicia o app
@@ -26,7 +27,6 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongo:/var/lib/mongo
       - mongo_data:/data/db:rw
   elasticsearch:
     image: elasticsearch:8.0.0
@@ -49,6 +49,5 @@ services:
 volumes:
   trudesk_uploads:
   trudesk_backups:
-  mongo:
   mongo_data:
   elasticsearch:

@@ -1,7 +1,7 @@
 #version: '2.1'
 services:
   trudesk:
-    image: domagalhaes/trudesk:1.2.11
+    image: ghcr.io/by-wise/trudesk:1.2.11
     platform: linux/amd64
     restart: always
     ports:
@@ -9,6 +9,8 @@ services:
     dns:
       - "1.1.1.1"
       - "8.8.8.8"
+    depends_on:
+      - mongo
     environment:
       NODE_ENV: production
       TRUDESK_DOCKER: "true"
@@ -16,16 +18,15 @@ services:
       TD_MONGODB_DATABASE: trudesk
       USE_XFORWARDIP: "true"
     volumes:
-      - ./config/config.yml:/usr/src/trudesk/config.yml:rw
+      - ./config:/usr/src/trudesk/config:rw
       - trudesk_uploads:/usr/src/trudesk/public/uploads:rw
       - trudesk_backups:/usr/src/trudesk/backups:rw
   mongo:
     image: mongo:5.0-focal
     restart: always
     ports:
-      - "27017:27017"
+      - "127.0.0.1:27017:27017"
     volumes:
-      - mongo:/var/lib/mongo
       - mongo_data:/data/db:rw
   elasticsearch:
     image: elasticsearch:8.0.0
@@ -41,13 +42,12 @@ services:
         soft: -1
         hard: -1
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:9300:9300"
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
 volumes:
   trudesk_uploads:
   trudesk_backups:
-  mongo:
   mongo_data:
   elasticsearch:
