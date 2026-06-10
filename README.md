@@ -1,64 +1,85 @@
 <h1 align="center">
 <a href="http://trudesk.io"><img src="http://trudesk.io/TD_Black.png" width="500" /></a>
-<br />Community Edition
+<br />Community Edition — By Wise Fork
 </h1>
 <p align="center">
-<a href="https://app.codacy.com/gh/polonel/trudesk/dashboard"><img alt="Codacy grade" src="https://img.shields.io/codacy/grade/3228c30aa1d14530ba25a04948985079?style=flat-square"></a>
-<a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square" /></a>
-<a href="https://app.circleci.com/pipelines/github/polonel/trudesk"><img src="https://img.shields.io/circleci/token/ad7d2d066a75685a15c8e2fd08bd75e53b18fbb7/project/github/polonel/trudesk/master.svg?style=flat-square" /></a>
-<a href="https://forum.trudesk.io"><img src="https://img.shields.io/discourse/https/forum.trudesk.io/topics.svg?style=flat-square" /></a>
-<a title="Crowdin" target="_blank" href="https://crowdin.com/project/trudesk"><img src="https://d322cqt584bo4o.cloudfront.net/trudesk/localized.svg?style=flat-square"></a>
-<a href="https://github.com/polonel/trudesk/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-APACHE%202-green.svg?style=flat-square" /></a>
-<a href="https://github.com/polonel/trudesk/releases"><img src="https://img.shields.io/github/release/polonel/trudesk.svg?style=flat-square" /></a>
-<a href="https://docs.trudesk.io/v1.2"><img src="https://img.shields.io/badge/documentation-click%20to%20read-blue.svg?style=flat-square" /></a>
+<a href="https://github.com/by-wise/trudesk/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-APACHE%202-green.svg?style=flat-square" /></a>
+<a href="https://github.com/by-wise/trudesk/pkgs/container/trudesk"><img src="https://img.shields.io/badge/ghcr.io-by--wise%2Ftrudesk-blue?style=flat-square&logo=docker" /></a>
+<a href="https://github.com/by-wise/trudesk/releases"><img src="https://img.shields.io/badge/version-1.3.0--by--wise-orange.svg?style=flat-square" /></a>
+<a href="https://github.com/polonel/trudesk"><img src="https://img.shields.io/badge/upstream-polonel%2Ftrudesk-lightgrey.svg?style=flat-square" /></a>
 <br />
-<sub>© 2014-2023, Trudesk, Inc. (<b><a href="https://trudesk.io">@trudesk</a></b>).</sub>
+<sub>© 2014-2023, Trudesk, Inc. (<b><a href="https://trudesk.io">@trudesk</a></b>). Fork mantido por <b>By Wise</b>.</sub>
 </p>
 <br />
 
 ### Open Source Help Desk - Simply Organized.
-Quickly resolve issues & task with an easy-to-use solution. Built with one goal in mind, to keep work loads organized and simple. **This is the source for Trudesk Community Edition. For the more comprehensive, cloud-hosted version, please see Trudesk Cloud at <a href="http://trudesk.io">Trudesk.io</a>.**
+Solução de help desk simples e organizada. Este repositório é um **fork interno mantido pela By Wise**, baseado no [Trudesk Community Edition](https://github.com/polonel/trudesk), com customizações específicas para a operação da empresa.
 
-<p align="center">
-    <img src="https://trudesk.io/images/hero-td-right.png" />
-</p>
+### Sobre este fork
+- **Upstream:** [polonel/trudesk](https://github.com/polonel/trudesk)
+- **Este repositório:** [by-wise/trudesk](https://github.com/by-wise/trudesk)
+- **Versão atual:** `1.3.0-by-wise`
+- **Imagem Docker:** `ghcr.io/by-wise/trudesk` (tags `1.3.0`, `1.2.11`, ... e `latest`)
+
+O objetivo do fork é manter o Trudesk CE atualizável a partir do projeto original, aplicando por cima ajustes de internacionalização, deploy/Docker, backup/restore e correções pontuais usadas no dia a dia da By Wise.
+
+### Customizações aplicadas neste fork
+Resumo das principais mudanças feitas a partir da base do mantenedor (detalhes completos no [CHANGELOG.md](CHANGELOG.md)):
+
+- **Internacionalização (i18n)**: suporte a `en-US` e `pt-BR` via `@ladjs/i18n`, com endpoint de tradução, preferência de locale no perfil do usuário, middleware de detecção de idioma e helpers do Handlebars para traduzir as views.
+- **Docker & Deploy**:
+  - Imagem publicada em `ghcr.io/by-wise/trudesk` (com tag `latest` sempre apontando para o último release).
+  - `docker-compose.yml` de produção com portas do MongoDB e Elasticsearch vinculadas a `127.0.0.1` (segurança), volume de configuração montado como diretório e dependência explícita do serviço `mongo`.
+  - `docker-compose.dev.yml` para desenvolvimento local, com bind mount do projeto e volume anônimo de `node_modules` (evita conflitos de dependências nativas como `bcrypt` no macOS ARM64).
+  - Inicialização via PM2 (`ecosystem.config.js`), garantindo que stdout/stderr sejam gravados em `logs/output.log` e a tela administrativa de logs funcione corretamente dentro do container.
+  - Scripts `docker:build`, `docker:publish`, `docker:up`, `docker:down`, `docker:dev:up` e `docker:dev:down` no `package.json`.
+- **Backup & Restore**: após uma restauração bem-sucedida, a flag de configuração `installed` é forçada para `true` automaticamente — útil para restaurações automatizadas via Docker, sem passar pelo wizard de instalação. Também foi adicionada a flag `global.isDocker` (baseada na env `TRUDESK_DOCKER`).
+- **Verificação de e-mail (IMAP MailCheck)**: correção da cadeia de callbacks para garantir que todas as mensagens não lidas sejam processadas e `handleMessages` seja chamado corretamente após o fetch.
+- **Anexos de tickets**: mensagens de erro mais descritivas (mostram o mime-type/extensão inválido), suporte a `application/zip` e aumento do limite de upload para 20MB.
+- **Logs**: nível de log padrão alterado para `debug`.
 
 #### Deploy Trudesk Anywhere
-**Trudesk** is built with <a href="https://nodejs.org">nodejs</a> and <a href="https://mongodb.org">mongodb</a> and can run on any cloud provider, docker, bare-metal, or even a raspberry pi.
-Take it for a spin on Ubuntu 20.04 with a one liner - <br />`curl -L -s https://storage.trudesk.io/install/ubuntu-1.2.sh | sudo bash`
+**Trudesk** é construído com <a href="https://nodejs.org">nodejs</a> e <a href="https://mongodb.org">mongodb</a> e roda em qualquer provedor de nuvem, Docker, bare-metal ou até um Raspberry Pi.
+
+##### Produção (Docker Compose)
+```bash
+docker compose up -d
+```
+Usa a imagem `ghcr.io/by-wise/trudesk:1.3.0`, com configuração persistida em `./config` e dados de upload/backup em volumes nomeados.
+
+##### Desenvolvimento (Docker Compose)
+```bash
+yarn docker:dev:up
+```
+Sobe o stack com `docker-compose.dev.yml`, montando o projeto local dentro do container para hot-reload.
 
 #### Requirements
 - NodeJS 16+
 - MongoDB 5.0+
-- Elasticsearch 8 (optional to enable search)
+- Elasticsearch 8 (opcional, habilita busca)
 
-### Documentation
-Online documentation: [https://docs.trudesk.io/v1.2](https://docs.trudesk.io/v1.2)
+### Documentação
+- Documentação original do Trudesk CE: [https://docs.trudesk.io/v1.2](https://docs.trudesk.io/v1.2)
+- Mudanças específicas deste fork: [CHANGELOG.md](CHANGELOG.md)
+- Manifests de Kubernetes: [kubernetes/](kubernetes)
 
-### Contributing
-If you like what you see here, and want to help support the work being done, you could:
-+ Report Bugs
-+ Request/Implement Features
-+ Refactor Codebase
-+ Help Write Documentation
+### Contribuindo
+Para mudanças que façam sentido para o projeto original, considere também enviar um PR para [polonel/trudesk](https://github.com/polonel/trudesk). Para customizações específicas da By Wise, abra um PR neste repositório.
 
-### Sponsors
-Just a few who have made the project possible.
-<br />
-<a href="https://www.browserstack.com"><img src="https://files.trudesk.io/browserstack-logo-600x315.png" width="115" /></a>
-
-Trudesk is tested with confidence using [BrowserStack](https://browserstack.com).
+### Créditos
+Este projeto é baseado no [Trudesk Community Edition](https://github.com/polonel/trudesk), criado e mantido por Chris Brame / Trudesk, Inc. Agradecimentos também aos sponsors originais do projeto, como o [BrowserStack](https://browserstack.com).
 
 ### License
 
     Copyright 2014-2023 Trudesk, Inc.
-    
+    Modifications Copyright 2025-2026 By Wise.
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-    
+
     http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
