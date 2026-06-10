@@ -174,6 +174,7 @@ module.exports = function (middleware, router, controllers) {
   router.post(genBaseUrl + 'tickets_by_team', apiv1, canUser('reports:create'), reportsGenCtrl.ticketsByTeam)
 
   // Settings
+  router.get('/api/v1/translations', apiv1, apiCtrl.settings.getTranslations)
   router.get('/api/v1/settings', apiv1, apiCtrl.settings.getSettings)
   router.put('/api/v1/settings', apiv1, isAdmin, apiCtrl.settings.updateSetting)
   router.post('/api/v1/settings/testmailer', apiv1, isAdmin, apiCtrl.settings.testMailer)

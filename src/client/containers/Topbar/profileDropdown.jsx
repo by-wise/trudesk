@@ -11,6 +11,7 @@ import Avatar from 'components/Avatar/Avatar'
 import EnableSwitch from 'components/Settings/EnableSwitch'
 import PDropdown from 'components/PDropdown'
 import Spacer from 'components/Spacer'
+import t from '../../lib/translations'
 
 import helpers from 'lib/helpers'
 
@@ -79,21 +80,21 @@ class ProfileDropdownPartial extends React.Component {
                   {this.props.sessionUser.fullname}
                 </span>
                 <span>{this.props.sessionUser.email}</span>
-                <a href='/profile'>Profile Settings</a>
+                <a href='/profile'>{t('PROFILE_SETTINGS')}</a>
               </div>
             </div>
           </div>
           {/*<Spacer showBorder={true} borderSize={1} top={0} bottom={0} />*/}
           {/*<div className={'user-action-items'}>*/}
           {/*  <EnableSwitch*/}
-          {/*    label={'Keyboard Shortcuts'}*/}
+          {/*    label={t('KEYBOARD_SHORTCUTS')}*/}
           {/*    sublabel={*/}
           {/*      <>*/}
           {/*        {this.keyboardShortcutsChecked && (*/}
           {/*          <div className={'sub-label'}>*/}
-          {/*            Press <code>?</code> to view{' '}*/}
+          {/*            {t('PRESS')} <code>?</code> {t('TO_VIEW')}{' '}*/}
           {/*            <a href='#' className={'no-ajaxy'}>*/}
-          {/*              Shortcuts*/}
+          {/*              {t('SHORTCUTS')}*/}
           {/*            </a>*/}
           {/*          </div>*/}
           {/*        )}*/}
@@ -110,14 +111,14 @@ class ProfileDropdownPartial extends React.Component {
           <div className={'profile-drop-actions'}>
             <div className={'action-logout'}>
               <i className='material-icons'>logout</i>
-              <a href='/logout'>Logout</a>
+              <a href='/logout'>{t('LOGOUT')}</a>
             </div>
           </div>
         </div>
         <div className={'pdrop-footer'}>
           <div className='links'>
             <a href='https://forum.trudesk.io' target={'_blank'} rel={'noreferrer'}>
-              Community
+              {t('COMMUNITY')}
             </a>
             <span>&middot;</span>
             <a
@@ -129,7 +130,7 @@ class ProfileDropdownPartial extends React.Component {
                 this.props.showModal('PRIVACY_POLICY')
               }}
             >
-              Privacy Policy
+              {t('PRIVACY_POLICY')}
             </a>
           </div>
         </div>

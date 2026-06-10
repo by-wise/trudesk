@@ -30,6 +30,7 @@ import NotificationsDropdownPartial from './notificationsDropdown'
 import ProfileDropdownPartial from 'containers/Topbar/profileDropdown'
 import ConversationsDropdownPartial from 'containers/Topbar/conversationsDropdown'
 import OnlineUserListPartial from 'containers/Topbar/onlineUserList'
+import t from '../../lib/translations'
 
 import helpers from 'lib/helpers'
 import Cookies from 'jscookie'
@@ -159,7 +160,7 @@ class TopbarContainer extends React.Component {
                     {sessionUser && helpers.canUser('tickets:create') && (
                       <li className='top-bar-icon nopadding'>
                         <button
-                          title={'Create Ticket'}
+                          title={t('CREATE_TICKET')}
                           className={'anchor'}
                           onClick={() => this.props.showModal('CREATE_TICKET')}
                         >
@@ -176,7 +177,7 @@ class TopbarContainer extends React.Component {
                     <li className='top-bar-icon'>
                       <PDropdownTrigger target={this.conversationsDropdownPartial}>
                         <a
-                          title={'Conversations'}
+                          title={t('CONVERSATIONS')}
                           className='no-ajaxy uk-vertical-align'
                           onClick={e => TopbarContainer.onConversationsClicked(e)}
                         >
@@ -186,7 +187,7 @@ class TopbarContainer extends React.Component {
                     </li>
                     <li className='top-bar-icon'>
                       <PDropdownTrigger target={this.notificationsDropdownPartial}>
-                        <a title={'Notifications'} className={'no-ajaxy uk-vertical-align'}>
+                        <a title={t('NOTIFICATIONS')} className={'no-ajaxy uk-vertical-align'}>
                           <i className='material-icons'>notifications</i>
                           <span
                             className={'alert uk-border-circle label ' + (this.notificationCount < 1 ? 'hide' : '')}
@@ -198,7 +199,7 @@ class TopbarContainer extends React.Component {
                     </li>
                     {/*<li className='top-bar-icon'>*/}
                     {/*  <OffCanvasTrigger target={'online-user-list'}>*/}
-                    {/*    <a title={'Online Users'} className='no-ajaxy'>*/}
+                    {/*    <a title={t('ONLINE_USERS')} className='no-ajaxy'>*/}
                     {/*      <i className='material-icons'>people_alt</i>*/}
                     {/*      <span*/}
                     {/*        className={*/}

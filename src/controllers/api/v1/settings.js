@@ -212,4 +212,30 @@ apiSettings.updateRoleOrder = function (req, res) {
   })
 }
 
+apiSettings.getTranslations = function (req, res) {
+  const fs = require('fs')
+  const path = require('path')
+  let locale = req.query.lang
+  if (!locale && req.user && req.user.preferences && req.user.preferences.locale) {
+    locale = req.user.preferences.locale
+  }
+  if (!locale) {
+    locale = req.cookies.locale || 'en-US'
+  }
+  if (locale === 'pt') locale = 'pt-BR'
+  if (locale === 'en') locale = 'en-US'
+  
+  try {
+    const fileContent = fs.readFileSync(path.join(__dirname, '../../../../locales/', locale + '.json'), 'utf8')
+    return res.json(JSON.parse(fileContent))
+  } catch (e) {
+    try {
+      const fileContent = fs.readFileSync(path.join(__dirname, '../../../../locales/en-US.json'), 'utf8')
+      return res.json(JSON.parse(fileContent))
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message })
+    }
+  }
+}
+
 module.exports = apiSettings

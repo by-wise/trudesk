@@ -80,7 +80,8 @@ const userSchema = mongoose.Schema({
     autoRefreshTicketGrid: { type: Boolean, default: true },
     openChatWindows: [{ type: String, default: [] }],
     keyboardShortcuts: { type: Boolean, default: true },
-    timezone: { type: String }
+    timezone: { type: String },
+    locale: { type: String, default: 'en' }
   },
 
   deleted: { type: Boolean, default: false }
@@ -104,22 +105,37 @@ userSchema.pre('save', function (next) {
   if (user.fullname) user.fullname = utils.applyMaxShortTextLength(utils.sanitizeFieldPlainText(user.fullname.trim()))
   if (user.title) user.title = utils.applyMaxShortTextLength(utils.sanitizeFieldPlainText(user.title.trim()))
 
-  if (!user.isModified('password')) {
-    return next()
-  }
+  const handlePassword = () => {
+    if (!user.isModified('password')) {
+      return next()
+    }
 
-  if (user.password.toString().length > 255) user.password = utils.applyMaxTextLength(user.password)
+    if (user.password.toString().length > 255) user.password = utils.applyMaxTextLength(user.password)
 
-  bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
-    if (err) return next(err)
-
-    bcrypt.hash(user.password, salt, function (err, hash) {
+    bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
       if (err) return next(err)
 
-      user.password = hash
-      return next()
+      bcrypt.hash(user.password, salt, function (err, hash) {
+        if (err) return next(err)
+
+        user.password = hash
+        return next()
+      })
     })
-  })
+  }
+
+  if (user.isNew && (!user.preferences || !user.preferences.locale)) {
+    const SettingSchema = require('./setting')
+    SettingSchema.getSettingByName('gen:defaultLanguage', (err, setting) => {
+      if (!err && setting && setting.value) {
+        if (!user.preferences) user.preferences = {}
+        user.preferences.locale = setting.value
+      }
+      handlePassword()
+    })
+  } else {
+    handlePassword()
+  }
 })
 
 userSchema.methods.addAccessToken = function (callback) {

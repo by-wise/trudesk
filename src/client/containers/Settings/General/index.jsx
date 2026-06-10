@@ -36,9 +36,9 @@ class GeneralSettings extends React.Component {
   componentWillUnmount () {}
 
   getSettingsValue (name) {
-    return this.props.settings.getIn(['settings', name, 'value'])
-      ? this.props.settings.getIn(['settings', name, 'value'])
-      : ''
+    const val = this.props.settings.getIn(['settings', name, 'value'])
+    if (val === undefined || val === null) return ''
+    return typeof val.toJS === 'function' ? val.toJS() : val
   }
 
   updateSetting (stateName, name, value) {
@@ -94,6 +94,21 @@ class GeneralSettings extends React.Component {
       />
     )
 
+    const DefaultLanguage = (
+      <SingleSelect
+        stateName='defaultLanguage'
+        settingName='gen:defaultLanguage'
+        items={this.getSettingsValue('availableLanguages') || [
+          { value: 'en-US', text: '🇺🇸 English' },
+          { value: 'pt-BR', text: '🇧🇷 Português' }
+        ]}
+        defaultValue={this.getSettingsValue('defaultLanguage') || 'en-US'}
+        onSelectChange={e => {
+          if (e.target.value) this.updateSetting('defaultLanguage', 'gen:defaultLanguage', e.target.value)
+        }}
+      />
+    )
+
     return (
       <div className={active ? 'active' : 'hide'}>
         <SettingItem
@@ -119,6 +134,11 @@ class GeneralSettings extends React.Component {
           subtitle='Set the local server timezone for date display'
           tooltip='User can override in user profile. Requires Server Restart'
           component={Timezone}
+        />
+        <SettingItem
+          title='Default Language'
+          subtitle='Set the default global language for the site and newly registered users'
+          component={DefaultLanguage}
         />
         <SettingItem
           title='Time & Date Format'

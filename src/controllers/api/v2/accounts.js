@@ -391,6 +391,7 @@ accountsApi.saveProfile = async (req, res) => {
     // User Preferences
     if (!_.isUndefined(payload.preferences) && !_.isNull(payload.preferences)) {
       if (payload.preferences.timezone) dbUser.preferences.timezone = payload.preferences.timezone
+      if (payload.preferences.locale) dbUser.preferences.locale = payload.preferences.locale
     }
 
     dbUser = await dbUser.save()
