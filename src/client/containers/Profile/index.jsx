@@ -55,6 +55,7 @@ class ProfileContainer extends React.Component {
 
   // Prefs
   @observable timezone = null
+  @observable language = null
 
   constructor (props) {
     super(props)
@@ -65,6 +66,13 @@ class ProfileContainer extends React.Component {
   componentDidMount () {
     // This will update the profile with the latest values
     this.props.setSessionUser()
+  }
+
+  getSettingsValue (name) {
+    if (!this.props.settings) return ''
+    const val = this.props.settings.getIn(['settings', name, 'value'])
+    if (val === undefined || val === null) return ''
+    return typeof val.toJS === 'function' ? val.toJS() : val
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
@@ -82,6 +90,7 @@ class ProfileContainer extends React.Component {
 
       if (this.props.sessionUser.preferences) {
         this.timezone = this.props.sessionUser.preferences.timezone
+        this.language = this.props.sessionUser.preferences.locale || 'en-US'
       }
     }
   }
@@ -143,7 +152,8 @@ class ProfileContainer extends React.Component {
         linkedinUrl: this.linkedinUrl,
         twitterUrl: this.twitterUrl,
         preferences: {
-          timezone: this.timezone
+          timezone: this.timezone,
+          locale: this.language
         }
       })
       .then(() => {
@@ -623,6 +633,17 @@ class ProfileContainer extends React.Component {
                           onSelectChange={e => this.onTimezoneSelectChange(e)}
                         />
                       </div>
+                      <div className={'uk-clearfix uk-margin-large-bottom'}>
+                        <label style={{ fontSize: '13px' }}>Language</label>
+                        <SingleSelect
+                          items={this.getSettingsValue('availableLanguages') || [
+                            { text: '🇧🇷 Português', value: 'pt-BR' },
+                            { text: '🇺🇸 English', value: 'en-US' }
+                          ]}
+                          defaultValue={this.language || undefined}
+                          onSelectChange={e => (this.language = e.target.value)}
+                        />
+                      </div>
                       <div>
                         <Button
                           text={'Save Preferences'}
@@ -651,12 +672,14 @@ ProfileContainer.propTypes = {
   showModal: PropTypes.func.isRequired,
   hideModal: PropTypes.func.isRequired,
   saveProfile: PropTypes.func.isRequired,
-  genMFA: PropTypes.func.isRequired
+  genMFA: PropTypes.func.isRequired,
+  settings: PropTypes.object
 }
 
 const mapStateToProps = state => ({
   sessionUser: state.shared.sessionUser,
-  socket: state.shared.socket
+  socket: state.shared.socket,
+  settings: state.settings.settings
 })
 
 export default connect(mapStateToProps, { showModal, hideModal, saveProfile, setSessionUser, genMFA })(ProfileContainer)

@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { showModal, hideModal } from 'actions/common'
 
 import helpers from 'lib/helpers'
+import t from '../../lib/translations'
 
 class AboutContainer extends React.Component {
   componentDidMount () {
@@ -21,7 +22,7 @@ class AboutContainer extends React.Component {
         <div className='uk-grid full-height scrollable' style={{ padding: '0 15px' }}>
           <div className='uk-width-1-2 uk-position-relative' style={{ padding: '25px 0 0 0' }}>
             <span style={{ position: 'absolute', top: 7, left: 35, fontSize: '11px' }} className='uk-text-muted'>
-              Powered by
+              {t('POWERED_BY')}
             </span>
             <svg
               version='1.1'
@@ -96,15 +97,15 @@ class AboutContainer extends React.Component {
               <circle className='st1' cx='284.9' cy='64.7' r='4' />
             </svg>
             <div style={{ paddingLeft: 40 }}>
-              <h6>Trudesk version {this.props.viewdata.get('version')}</h6>
+              <h6>{t('TRUDESK_VERSION')} {this.props.viewdata.get('version')}</h6>
               <p style={{ fontSize: '12px' }}>
                 Copyright &copy;2014-2022 Trudesk, Inc. (Chris Brame) <br /> <br />
                 <a href='https://docs.trudesk.io/v1.2/' className='no-ajaxy' rel={'noreferrer'} target='_blank'>
-                  General Documentation
+                  {t('GENERAL_DOCUMENTATION')}
                 </a>
                 <br />
                 <a href='https://docs.trudesk.io/v1/api' className='no-ajaxy' rel={'noreferrer'} target='_blank'>
-                  API Documentation
+                  {t('API_DOCUMENTATION')}
                 </a>
                 <br />
                 <a
@@ -114,35 +115,31 @@ class AboutContainer extends React.Component {
                     this.props.showModal('PRIVACY_POLICY')
                   }}
                 >
-                  Privacy Policy
+                  {t('PRIVACY_POLICY')}
                 </a>{' '}
                 <br />
                 <br />
-                Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file
-                except in compliance with the License. You may obtain a copy of the License at{' '}
+                {t('ABOUT_LICENSE_TEXT_1')}{' '}
                 <a href='http://www.apache.org/licenses/LICENSE-2.0' rel={'noreferrer'} target='_blank'>
                   http://www.apache.org/licenses/LICENSE-2.0
                 </a>
                 .
                 <br />
-                Unless required by applicable law or agreed to in writing, software distributed under the License is
-                distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-                or implied. See the License for the specific language governing permissions and limitations under the
-                License.
+                {t('ABOUT_LICENSE_TEXT_2')}
               </p>
               <p style={{ color: '#55616e', fontSize: '12px' }}>
-                Please support the project by donating. A simple cup of coffee or a good dinner goes a long way.
+                {t('ABOUT_DONATE_TEXT')}{' '}
                 <a
                   href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=USPWFP6P6RTKC'
                   target='_blank'
                   rel={'noreferrer'}
                 >
-                  Donate
+                  {t('DONATE')}
                 </a>
               </p>
               <hr style={{ width: '100%', height: 1 }} className='bg-accent' />
               <p style={{ color: '#55616e', fontSize: '12px', marginBottom: 5 }}>
-                This software uses the following third party plugins:
+                {t('ABOUT_THIRD_PARTY_PLUGINS')}
               </p>
               <ul
                 style={{

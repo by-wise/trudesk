@@ -26,6 +26,27 @@ require('moment-duration-format')(moment)
 
 // The module to be exported
 const helpers = {
+  TRANSLATE: function (key, options) {
+    const root = (options && options.data && options.data.root) || {}
+    const locale = root.locale || 'en-US'
+    let activeDict = {}
+    let baseDict = {}
+    try {
+      activeDict = require('../../../locales/' + locale + '.json')
+    } catch (e) {}
+    try {
+      baseDict = require('../../../locales/en-US.json')
+    } catch (e) {}
+    
+    if (activeDict[key]) return activeDict[key]
+    if (baseDict[key]) return baseDict[key]
+    
+    return key
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/^\w/, c => c.toUpperCase())
+  },
+
   concat: function (a, b, space, comma) {
     if (space && (comma === false || _.isObject(comma))) {
       return a.toString() + ' ' + b.toString()

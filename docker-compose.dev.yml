@@ -1,7 +1,7 @@
 #version: '2.1'
 services:
   trudesk:
-    image: ghcr.io/by-wise/trudesk:1.2.11  # Usa a sua imagem como base para garantir compatibilidade do ambiente
+    image: ghcr.io/by-wise/trudesk:1.3.0  # Usa a sua imagem como base para garantir compatibilidade do ambiente
     restart: always
     ports:
       - "8118:8118"

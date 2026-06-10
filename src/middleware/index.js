@@ -112,6 +112,56 @@ module.exports = function (app, db, callback) {
         csrf.init()
         app.use(csrf.generateToken)
 
+        // Locale Detection Middleware
+        app.use(function (req, res, next) {
+          let locale = req.query.lang
+          if (!locale && req.user && req.user.preferences && req.user.preferences.locale) {
+            locale = req.user.preferences.locale
+          }
+          if (!locale) {
+            locale = req.cookies.locale
+          }
+          
+          const handleLocaleAndNext = (finalLocale) => {
+            if (req.query.lang || req.cookies.locale !== finalLocale) {
+              res.cookie('locale', finalLocale, { maxAge: 900000 * 4 * 24 * 365, httpOnly: true })
+            }
+            res.locals.locale = finalLocale
+
+            const fs = require('fs')
+            const path = require('path')
+            let translations = {}
+            try {
+              const fileContent = fs.readFileSync(path.join(__dirname, '../../locales/', finalLocale + '.json'), 'utf8')
+              translations = JSON.parse(fileContent)
+            } catch (e) {
+              try {
+                const fileContent = fs.readFileSync(path.join(__dirname, '../../locales/en-US.json'), 'utf8')
+                translations = JSON.parse(fileContent)
+              } catch (err) {}
+            }
+            res.locals.translations = JSON.stringify(translations)
+            next()
+          }
+
+          if (locale) {
+            if (locale === 'pt') locale = 'pt-BR'
+            if (locale === 'en') locale = 'en-US'
+            return handleLocaleAndNext(locale)
+          }
+
+          const acceptLanguage = req.headers['accept-language'] || ''
+          if (acceptLanguage.toLowerCase().includes('pt')) {
+            return handleLocaleAndNext('pt-BR')
+          }
+
+          const SettingSchema = require('../models/setting')
+          SettingSchema.getSettingByName('gen:defaultLanguage', (err, setting) => {
+            const finalLocale = (!err && setting && setting.value) ? setting.value : 'en-US'
+            handleLocaleAndNext(finalLocale)
+          })
+        })
+
         // Maintenance Mode
         app.use(function (req, res, next) {
           var settings = require('../settings/settingsUtil')
