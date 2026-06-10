@@ -5,7 +5,7 @@
 <p align="center">
 <a href="https://github.com/by-wise/trudesk/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-APACHE%202-green.svg?style=flat-square" /></a>
 <a href="https://github.com/by-wise/trudesk/pkgs/container/trudesk"><img src="https://img.shields.io/badge/ghcr.io-by--wise%2Ftrudesk-blue?style=flat-square&logo=docker" /></a>
-<a href="https://github.com/by-wise/trudesk/releases"><img src="https://img.shields.io/badge/version-1.3.0--by--wise-orange.svg?style=flat-square" /></a>
+<a href="https://github.com/by-wise/trudesk/releases"><img src="https://img.shields.io/badge/version-1.3.1--by--wise-orange.svg?style=flat-square" /></a>
 <a href="https://github.com/polonel/trudesk"><img src="https://img.shields.io/badge/upstream-polonel%2Ftrudesk-lightgrey.svg?style=flat-square" /></a>
 <br />
 <sub>© 2014-2023, Trudesk, Inc. (<b><a href="https://trudesk.io">@trudesk</a></b>). Fork mantido por <b>By Wise</b>.</sub>
@@ -18,8 +18,8 @@ Solução de help desk simples e organizada. Este repositório é um **fork inte
 ### Sobre este fork
 - **Upstream:** [polonel/trudesk](https://github.com/polonel/trudesk)
 - **Este repositório:** [by-wise/trudesk](https://github.com/by-wise/trudesk)
-- **Versão atual:** `1.3.0-by-wise`
-- **Imagem Docker:** `ghcr.io/by-wise/trudesk` (tags `1.3.0`, `1.2.11`, ... e `latest`)
+- **Versão atual:** `1.3.1-by-wise`
+- **Imagem Docker:** `ghcr.io/by-wise/trudesk` (tags `1.3.1`, `1.2.11`, ... e `latest`)
 
 O objetivo do fork é manter o Trudesk CE atualizável a partir do projeto original, aplicando por cima ajustes de internacionalização, deploy/Docker, backup/restore e correções pontuais usadas no dia a dia da By Wise.
 
@@ -45,7 +45,7 @@ Resumo das principais mudanças feitas a partir da base do mantenedor (detalhes 
 ```bash
 docker compose up -d
 ```
-Usa a imagem `ghcr.io/by-wise/trudesk:1.3.0`, com configuração persistida em `./config` e dados de upload/backup em volumes nomeados.
+Usa a imagem `ghcr.io/by-wise/trudesk:1.3.1`, com configuração persistida em `./config` e dados de upload/backup em volumes nomeados.
 
 ##### Desenvolvimento (Docker Compose)
 ```bash
