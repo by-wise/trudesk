@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 
 import d3 from 'd3'
 import MG from 'metricsgraphics'
-
-const noDataDiv = <div className='no-data-available-text'>No Data Available</div>
+import t from '../../lib/translations'
 
 export default function MGraph (props) {
   const graphRef = useRef()
   let graphParams = {}
+  const noDataDiv = <div className='no-data-available-text'>{t('NO_DATA_AVAILABLE')}</div>
 
   useEffect(() => {
     if (props.data && graphRef.current && props.data.length > 0) {

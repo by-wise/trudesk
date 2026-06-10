@@ -24,6 +24,7 @@ import { TICKETS_ISSUE_SET, TICKETS_UI_ATTACHMENTS_UPDATE } from 'serverSocket/s
 import helpers from 'lib/helpers'
 import axios from 'axios'
 import Log from '../../logger'
+import t from '../../lib/translations'
 
 const setupImages = parent => {
   const imagesEl = parent.issueBody.querySelectorAll('img:not(.hasLinked)')
@@ -99,11 +100,11 @@ class IssuePartial extends React.Component {
       })
       .then(() => {
         this.props.socket.emit(TICKETS_UI_ATTACHMENTS_UPDATE, { _id: this.ticketId })
-        helpers.UI.showSnackbar('Attachment Successfully Uploaded')
+        helpers.UI.showSnackbar(t('TICKETS_ATTACHMENT_UPLOADED'))
       })
       .catch(error => {
         Log.error(error)
-        let errMessage = 'An Error has occurred.'
+        let errMessage = t('ERROR_OCCURRED')
         if (error.message) errMessage = error.message
         if (error.response && error.response.data) errMessage = error.response.data
         if (error.response && error.response.data && error.response.data.error) errMessage = error.response.data.error
@@ -122,7 +123,7 @@ class IssuePartial extends React.Component {
       .delete(`/api/v1/tickets/${this.ticketId}/attachments/remove/${attachmentId}`)
       .then(() => {
         this.props.socket.emit(TICKETS_UI_ATTACHMENTS_UPDATE, { _id: this.ticketId })
-        helpers.UI.showSnackbar('Attachment Removed')
+        helpers.UI.showSnackbar(t('TICKETS_ATTACHMENT_REMOVED'))
       })
       .catch(error => {
         Log.error(error)

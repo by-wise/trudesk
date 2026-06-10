@@ -128,26 +128,14 @@ module.exports = function (app, db, callback) {
             }
             res.locals.locale = finalLocale
 
-            const fs = require('fs')
-            const path = require('path')
-            let translations = {}
-            try {
-              const fileContent = fs.readFileSync(path.join(__dirname, '../../locales/', finalLocale + '.json'), 'utf8')
-              translations = JSON.parse(fileContent)
-            } catch (e) {
-              try {
-                const fileContent = fs.readFileSync(path.join(__dirname, '../../locales/en-US.json'), 'utf8')
-                translations = JSON.parse(fileContent)
-              } catch (err) {}
-            }
-            res.locals.translations = JSON.stringify(translations)
+            const i18n = require('../helpers/i18n')
+            res.locals.translations = JSON.stringify(i18n.loadTranslations(finalLocale))
             next()
           }
 
           if (locale) {
-            if (locale === 'pt') locale = 'pt-BR'
-            if (locale === 'en') locale = 'en-US'
-            return handleLocaleAndNext(locale)
+            const i18n = require('../helpers/i18n')
+            return handleLocaleAndNext(i18n.normalizeLocale(locale))
           }
 
           const acceptLanguage = req.headers['accept-language'] || ''

@@ -56,31 +56,8 @@ util.getSettings = async callback => {
         s.siteUrl = parseSetting(settings, 'gen:siteurl', '')
         s.timezone = parseSetting(settings, 'gen:timezone', 'America/New_York')
 
-        const fs = require('fs')
-        const path = require('path')
-        let languages = []
-        try {
-          const localesPath = path.join(__dirname, '../../locales')
-          const files = fs.readdirSync(localesPath)
-          for (const f of files) {
-            if (f.endsWith('.json')) {
-              const fileContent = fs.readFileSync(path.join(localesPath, f), 'utf8')
-              const parsed = JSON.parse(fileContent)
-              const name = parsed.LOCALE_NAME || f.replace('.json', '')
-              const emoji = parsed.LOCALE_EMOJI || ''
-              languages.push({
-                value: f.replace('.json', ''),
-                text: (emoji ? emoji + ' ' : '') + name
-              })
-            }
-          }
-        } catch (e) {
-          winston.error(e)
-          languages = [
-            { value: 'en-US', text: '🇺🇸 English' },
-            { value: 'pt-BR', text: '🇧🇷 Português' }
-          ]
-        }
+        const i18n = require('../helpers/i18n')
+        const languages = i18n.getAvailableLanguages()
 
         s.defaultLanguage = parseSetting(settings, 'gen:defaultLanguage', 'en-US')
         s.availableLanguages = { value: languages }

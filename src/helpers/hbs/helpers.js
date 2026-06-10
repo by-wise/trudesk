@@ -29,18 +29,13 @@ const helpers = {
   TRANSLATE: function (key, options) {
     const root = (options && options.data && options.data.root) || {}
     const locale = root.locale || 'en-US'
-    let activeDict = {}
-    let baseDict = {}
-    try {
-      activeDict = require('../../../locales/' + locale + '.json')
-    } catch (e) {}
-    try {
-      baseDict = require('../../../locales/en-US.json')
-    } catch (e) {}
-    
+    const i18n = require('../i18n')
+    const activeDict = i18n.loadTranslations(locale)
+    const baseDict = i18n.loadTranslations('en-US')
+
     if (activeDict[key]) return activeDict[key]
     if (baseDict[key]) return baseDict[key]
-    
+
     return key
       .replace(/_/g, ' ')
       .toLowerCase()

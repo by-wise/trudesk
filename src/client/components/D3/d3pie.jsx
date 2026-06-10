@@ -5,6 +5,7 @@ import { shuffle, map, zipObject } from 'lodash'
 import * as d3 from 'vendor/d3/d3.min'
 import 'd3pie'
 import * as c3 from 'c3'
+import t from '../../lib/translations'
 
 export default function D3Pie (props) {
   const pieChart = useRef()
@@ -27,7 +28,7 @@ export default function D3Pie (props) {
           columns: props.data,
           type: props.type,
           colors: mappedColors,
-          empty: { label: { text: props.emptyLabel } }
+          empty: { label: { text: props.emptyLabel || t('NO_DATA_AVAILABLE') } }
         },
         donut: {
           label: {
@@ -57,7 +58,6 @@ D3Pie.defaultProps = {
   data: [],
   type: 'pie',
   size: 200,
-  emptyLabel: 'No Data Available',
   colors: [
     '#e74c3c',
     '#3498db',

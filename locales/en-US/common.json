@@ -122,5 +122,13 @@
   "ABOUT_LICENSE_TEXT_2": "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
   "ABOUT_DONATE_TEXT": "Please support the project by donating. A simple cup of coffee or a good dinner goes a long way.",
   "DONATE": "Donate",
-  "ABOUT_THIRD_PARTY_PLUGINS": "This software uses the following third party plugins:"
+  "ABOUT_THIRD_PARTY_PLUGINS": "This software uses the following third party plugins:",
+  "CREATE": "Create",
+  "CANCEL": "Cancel",
+  "DELETE": "Delete",
+  "CLEAR": "Clear",
+  "SEARCH": "Search",
+  "UNKNOWN": "Unknown",
+  "ERROR_PREFIX": "Error: ",
+  "NO_DATA_AVAILABLE": "No Data Available"
 }

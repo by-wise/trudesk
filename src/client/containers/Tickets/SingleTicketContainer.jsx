@@ -60,6 +60,7 @@ import Log from '../../logger'
 import UIkit from 'uikit'
 import moment from 'moment'
 import SpinLoader from 'components/SpinLoader'
+import t from '../../lib/translations'
 
 const fetchTicket = parent => {
   axios
@@ -81,8 +82,7 @@ const fetchTicket = parent => {
 
 const showPriorityConfirm = () => {
   UIkit.modal.confirm(
-    'Selected Priority does not exist for this ticket type. Priority has reset to the default for this type.' +
-      '<br><br><strong>Please select a new priority</strong>',
+    t('TICKETS_PRIORITY_RESET_MSG') + '<br><br><strong>' + t('TICKETS_PRIORITY_SELECT_NEW') + '</strong>',
     () => {},
     { cancelButtonClass: 'uk-hidden' }
   )
@@ -299,7 +299,7 @@ class SingleTicketContainer extends React.Component {
                 style={{ width: 360, maxWidth: 360, minWidth: 360 }}
               >
                 <div className='page-title-border-right relative' style={{ padding: '0 30px' }}>
-                  <p>Ticket #{this.ticket.uid}</p>
+                  <p>{t('TICKETS_NUMBER_PREFIX')}{this.ticket.uid}</p>
                   <StatusSelector
                     ticketId={this.ticket._id}
                     status={this.ticket.status._id}
@@ -314,12 +314,12 @@ class SingleTicketContainer extends React.Component {
                 <div className='page-content-left full-height scrollable'>
                   <div className='ticket-details-wrap uk-position-relative uk-clearfix'>
                     <div className='ticket-assignee-wrap uk-clearfix' style={{ paddingRight: 30 }}>
-                      <h4>Assignee</h4>
+                      <h4>{t('TICKETS_ASSIGNEE')}</h4>
                       <div className='ticket-assignee uk-clearfix'>
                         {hasTicketUpdate && (
                           <a
                             role='button'
-                            title='Set Assignee'
+                            title={t('TICKETS_SET_ASSIGNEE')}
                             style={{ float: 'left' }}
                             className='relative no-ajaxy'
                             onClick={() => this.props.socket.emit(TICKETS_ASSIGNEE_LOAD)}
@@ -342,7 +342,7 @@ class SingleTicketContainer extends React.Component {
                           />
                         )}
                         <div className='ticket-assignee-details'>
-                          {!this.ticket.assignee && <h3>No User Assigned</h3>}
+                          {!this.ticket.assignee && <h3>{t('TICKETS_NO_USER_ASSIGNED')}</h3>}
                           {this.ticket.assignee && (
                             <Fragment>
                               <h3>{this.ticket.assignee.fullname}</h3>
@@ -373,7 +373,7 @@ class SingleTicketContainer extends React.Component {
                         {/* Type */}
                         <div className='uk-width-1-2 uk-float-left nopadding'>
                           <div className='marginright5'>
-                            <span>Type</span>
+                            <span>{t('TICKETS_TYPE')}</span>
                             {hasTicketUpdate && (
                               <select
                                 value={this.ticket.type._id}
@@ -415,7 +415,7 @@ class SingleTicketContainer extends React.Component {
                         {/* Priority */}
                         <div className='uk-width-1-2 uk-float-left nopadding'>
                           <div className='marginleft5'>
-                            <span>Priority</span>
+                            <span>{t('TICKETS_PRIORITY')}</span>
                             {hasTicketUpdate && (
                               <select
                                 name='tPriority'
@@ -442,7 +442,7 @@ class SingleTicketContainer extends React.Component {
                         </div>
                         {/*  Group */}
                         <div className='uk-width-1-1 nopadding uk-clearfix'>
-                          <span>Group</span>
+                          <span>{t('TICKETS_GROUP')}</span>
                           {hasTicketUpdate && (
                             <select
                               value={this.ticket.group._id}
@@ -465,7 +465,7 @@ class SingleTicketContainer extends React.Component {
                         </div>
                         {/*  Due Date */}
                         <div className='uk-width-1-1 p-0'>
-                          <span>Due Date</span> {hasTicketUpdate && <span>-&nbsp;</span>}
+                          <span>{t('TICKETS_DUE_DATE')}</span> {hasTicketUpdate && <span>-&nbsp;</span>}
                           {hasTicketUpdate && (
                             <div className={'uk-display-inline'}>
                               <a
@@ -478,7 +478,7 @@ class SingleTicketContainer extends React.Component {
                                   })
                                 }}
                               >
-                                Clear
+                                {t('CLEAR')}
                               </a>
                               <DatePicker
                                 name={'ticket_due_date'}
@@ -505,7 +505,7 @@ class SingleTicketContainer extends React.Component {
                         {/* Tags */}
                         <div className='uk-width-1-1 nopadding'>
                           <span>
-                            Tags
+                            {t('TICKETS_TAGS')}
                             {hasTicketUpdate && (
                               <Fragment>
                                 <span> - </span>
@@ -521,7 +521,7 @@ class SingleTicketContainer extends React.Component {
                                       })
                                     }}
                                   >
-                                    Edit Tags
+                                    {t('TICKETS_EDIT_TAGS')}
                                   </a>
                                 </div>
                               </Fragment>
@@ -542,7 +542,7 @@ class SingleTicketContainer extends React.Component {
                     {helpers.canUser('agent:*', true) && (
                       <div className='uk-width-1-1 padding-left-right-15'>
                         <div className='tru-card ticket-details pr-0 pb-0' style={{ height: 250 }}>
-                          Ticket History
+                          {t('TICKETS_HISTORY')}
                           <hr style={{ padding: 0, margin: 0 }} />
                           <div className='history-items scrollable' style={{ paddingTop: 12 }}>
                             {this.ticket.history &&
@@ -552,7 +552,7 @@ class SingleTicketContainer extends React.Component {
                                     dateTime={helpers.formatDate(item.date, this.props.common.get('longDateFormat'))}
                                   />
                                   <em>
-                                    Action by: <span>{item.owner.fullname}</span>
+                                    {t('TICKETS_ACTION_BY')} <span>{item.owner.fullname}</span>
                                   </em>
                                   <p>{item.description}</p>
                                 </div>
@@ -577,7 +577,7 @@ class SingleTicketContainer extends React.Component {
                           this.transferToThirdParty(e)
                         }}
                       >
-                        Transfer to ThirdParty
+                        {t('TICKETS_TRANSFER_THIRD_PARTY')}
                       </a>
                     </div>
                   )}
@@ -590,7 +590,7 @@ class SingleTicketContainer extends React.Component {
                         helpers.scrollToBottom('.page-content-right', true)
                       }}
                     >
-                      Add Comment
+                      {t('TICKETS_ADD_COMMENT')}
                     </a>
                   </div>
                   <div
@@ -606,7 +606,7 @@ class SingleTicketContainer extends React.Component {
                       onChange={e => this.onSubscriberChanged(e)}
                     />
                     <label className='onoffswitch-label' htmlFor='subscribeSwitch'>
-                      <span className='onoffswitch-inner subscribeSwitch-inner' />
+                      <span className='onoffswitch-inner subscribeSwitch-inner' data-text-on={t('TICKETS_SUBSCRIBE')} />
                       <span className='onoffswitch-switch subscribeSwitch-switch' />
                     </label>
                   </div>
@@ -649,21 +649,21 @@ class SingleTicketContainer extends React.Component {
                         <TruTabSelectors style={{ marginLeft: 110 }}>
                           <TruTabSelector
                             selectorId={0}
-                            label='All'
+                            label={t('TICKETS_TAB_ALL')}
                             active={true}
                             showBadge={true}
                             badgeText={this.commentsAndNotes.length}
                           />
                           <TruTabSelector
                             selectorId={1}
-                            label='Comments'
+                            label={t('TICKETS_COMMENTS')}
                             showBadge={true}
                             badgeText={this.ticket ? this.ticket.comments && this.ticket.comments.length : 0}
                           />
                           {helpers.canUser('tickets:notes', true) && (
                             <TruTabSelector
                               selectorId={2}
-                              label='Notes'
+                              label={t('TICKETS_NOTES')}
                               showBadge={true}
                               badgeText={this.ticket ? this.ticket.notes && this.ticket.notes.length : 0}
                             />
@@ -794,12 +794,12 @@ class SingleTicketContainer extends React.Component {
                           <TruTabWrapper style={{ paddingLeft: 85 }}>
                             <TruTabSelectors showTrack={false}>
                               {helpers.canUser('comments:create', true) && (
-                                <TruTabSelector selectorId={0} label={'Comment'} active={true} />
+                                <TruTabSelector selectorId={0} label={t('TICKETS_COMMENT')} active={true} />
                               )}
                               {helpers.canUser('tickets:notes', true) && (
                                 <TruTabSelector
                                   selectorId={1}
-                                  label={'Internal Note'}
+                                  label={t('TICKETS_INTERNAL_NOTE')}
                                   active={!helpers.canUser('comments:create', true)}
                                 />
                               )}
@@ -823,7 +823,7 @@ class SingleTicketContainer extends React.Component {
                                       className='uk-button uk-button-accent'
                                       style={{ padding: '10px 15px' }}
                                     >
-                                      Post Comment
+                                      {t('TICKETS_POST_COMMENT')}
                                     </button>
                                   </div>
                                 </div>
@@ -848,7 +848,7 @@ class SingleTicketContainer extends React.Component {
                                       className='uk-button uk-button-accent'
                                       style={{ padding: '10px 15px' }}
                                     >
-                                      Save Note
+                                      {t('TICKETS_SAVE_NOTE')}
                                     </button>
                                   </div>
                                 </div>
@@ -861,7 +861,7 @@ class SingleTicketContainer extends React.Component {
                 </div>
               </div>
             </div>
-            <OffCanvasEditor primaryLabel={'Save Edit'} ref={r => (this.editorWindow = r)} />
+            <OffCanvasEditor primaryLabel={t('TICKETS_SAVE_EDIT')} ref={r => (this.editorWindow = r)} />
           </Fragment>
         )}
       </div>

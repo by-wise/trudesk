@@ -44,7 +44,7 @@
             margin-bottom: 15px;
             border-radius: 3px;
             -moz-border-radius: 3px;
-            -webkit-radius: 3px;
+            -webkit-border-radius: 3px;
             font-weight: 300;
         }
 
@@ -285,7 +285,7 @@
             return false;
         });
 
-        $(document.ready(function() {
+        $(document).ready(function() {
             if (screen.width <= 800) {
                 document.location = '/mobile';
             }

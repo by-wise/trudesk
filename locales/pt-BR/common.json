@@ -122,5 +122,13 @@
   "ABOUT_LICENSE_TEXT_2": "A menos que exigido por lei aplicável ou acordado por escrito, o software distribuído sob a Licença é distribuído \"COMO ESTÁ\", SEM GARANTIAS OU CONDIÇÕES DE QUALQUER TIPO, expressas ou implícitas. Consulte a Licença para obter as permissões e limitações de governança específicas sob a Licença.",
   "ABOUT_DONATE_TEXT": "Por favor, apoie o projeto doando. Uma simples xícara de café ou um bom jantar ajudam muito.",
   "DONATE": "Doar",
-  "ABOUT_THIRD_PARTY_PLUGINS": "Este software utiliza os seguintes plugins de terceiros:"
+  "ABOUT_THIRD_PARTY_PLUGINS": "Este software utiliza os seguintes plugins de terceiros:",
+  "CREATE": "Criar",
+  "CANCEL": "Cancelar",
+  "DELETE": "Excluir",
+  "CLEAR": "Limpar",
+  "SEARCH": "Pesquisar",
+  "UNKNOWN": "Desconhecido",
+  "ERROR_PREFIX": "Erro: ",
+  "NO_DATA_AVAILABLE": "Nenhum Dado Disponível"
 }
