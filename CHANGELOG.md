@@ -1,3 +1,28 @@
+## [1.3.1-by-wise] (2026-06-10)
+
+
+### Fixes
+
+* **docker:** persist pm2 logs to `logs/output.log` via `ecosystem.config.js` so the admin "View Logs" screen works inside the container
+* **docker:** add `latest` tag to the `docker:build` and `docker:publish` scripts
+
+## [1.3.0-by-wise] (2026-06-10)
+
+
+### Features
+
+* **i18n:** add localization support for `en-US` and `pt-BR`, including a translations API endpoint, per-user locale preference, locale detection middleware and Handlebars translation helpers
+
+### Fixes
+
+* **tickets:** improve attachment upload error messages (show the invalid mime-type/extension), allow `application/zip` attachments and raise the upload limit to 20MB
+* **mailcheck:** fix IMAP fetch callback chain so every unseen message is parsed and `handleMessages` runs after the fetch completes
+* **backup:** force the `installed` setting to `true` after a successful restore, and add a `global.isDocker` flag based on `TRUDESK_DOCKER` for Docker-friendly restores
+
+### Chore
+
+* **logger:** default log level changed to `debug`
+
 ## [1.2.11] (2026-09-06)
 
 
